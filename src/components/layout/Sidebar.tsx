@@ -105,16 +105,20 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
         }`}
       >
         {/* Sidebar Brand Header (Fixed top) */}
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[#441a0e] bg-[#1a0804] shrink-0">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-[#441a0e] bg-[#1a0804] shrink-0">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-amberGold-500 flex items-center justify-center text-white shadow-md">
-              <ChefHat className="w-5 h-5" />
-            </div>
+            <img
+              src="/logo.jpg"
+              alt="Karaikudi Mess Logo"
+              className="w-10 h-10 rounded-xl object-cover border border-amberGold-400/50 shadow-md bg-black/40"
+            />
             <div>
-              <span className="font-extrabold text-base tracking-wide text-white font-serif">
+              <span className="font-extrabold text-sm tracking-wide text-white font-serif block leading-tight">
                 KARAIKUDI
               </span>
-              <span className="text-amberGold-500 font-bold text-xs ml-1">MESS</span>
+              <span className="text-amberGold-400 font-bold text-[11px] tracking-wider">
+                MESS POS
+              </span>
             </div>
           </Link>
 

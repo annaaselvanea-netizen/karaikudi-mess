@@ -41,7 +41,7 @@ export function SettingsView() {
           Restaurant Profile & System Configuration
         </h2>
         <p className="text-xs text-stone-500 font-tamil mt-0.5">
-          ஹோட்டல் பெயர், முகவரி, ஜி.எஸ்.டி, பிரிண்டர் & கூகுள் தாள்கள் அமைப்புகள்
+          ஹோட்டல் பெயர், இலச்சினை (Logo), முகவரி, ஜி.எஸ்.டி, பிரிண்டர் & கூகுள் தாள்கள் அமைப்புகள்
         </p>
       </div>
 
@@ -50,8 +50,28 @@ export function SettingsView() {
         <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
           <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-3">
             <Building2 className="w-4 h-4 text-brand-600" />
-            Restaurant Identity & Contact
+            Restaurant Identity & Logo
           </h3>
+
+          {/* Logo Card */}
+          <div className="flex items-center gap-4 p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200">
+            <img
+              src={form.logoUrl || '/logo.jpg'}
+              alt="Restaurant Logo"
+              className="w-20 h-20 rounded-2xl object-cover border-2 border-amberGold-400 bg-black/40 shadow-md shrink-0"
+            />
+            <div className="flex-1">
+              <label className="font-bold text-stone-800 block mb-1">Official Restaurant Logo</label>
+              <input
+                type="text"
+                value={form.logoUrl || '/logo.jpg'}
+                onChange={(e) => handleChange('logoUrl', e.target.value)}
+                placeholder="/logo.jpg"
+                className="w-full px-3 py-1.5 border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+              <p className="text-[10px] text-stone-500 mt-1">Image path in public directory or hosted URL</p>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>

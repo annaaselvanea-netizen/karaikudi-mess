@@ -44,10 +44,12 @@ export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
           </svg>
         </button>
 
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-500 to-amberGold-600 flex items-center justify-center text-white shadow-sm font-bold text-lg">
-            KM
-          </div>
+        <div className="flex items-center gap-2.5">
+          <img
+            src={settings.logoUrl || '/logo.jpg'}
+            alt="Karaikudi Mess Logo"
+            className="w-10 h-10 rounded-xl object-cover border border-amberGold-400/50 shadow-md bg-black/40"
+          />
           <div className="hidden sm:block">
             <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5 leading-none">
               {language === 'ta' && settings.tamilName ? settings.tamilName : settings.name || 'Karaikudi Mess'}

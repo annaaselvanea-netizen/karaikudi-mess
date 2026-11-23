@@ -3,6 +3,7 @@ import { MenuItem, Category, RestaurantSettings, Expense, AppUser } from '@/type
 export const DEFAULT_SETTINGS: RestaurantSettings = {
   name: 'Karaikudi Mess',
   tamilName: 'காரைக்குடி மெஸ்',
+  logoUrl: '/logo.jpg',
   tagline: 'Authentic Chettinad Flavours & Traditional Hospitality',
   address: 'No. 42, Chettiar Street, Karaikudi, Tamil Nadu - 630001',
   phone: '+91 98421 76543 / 04565-224488',

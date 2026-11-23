@@ -69,26 +69,33 @@ export function A4InvoiceModal({ bill, settings, onClose }: A4InvoiceModalProps)
           >
             {/* Top Brand Banner */}
             <div className="flex justify-between items-start pb-6 border-b-2 border-brand-800">
-              <div>
-                <h1 className="text-2xl font-black text-[#441a0e] tracking-tight uppercase">
-                  {settings.name}
-                </h1>
-                <p className="text-xs font-semibold text-brand-700 tracking-wide mt-0.5">
-                  {settings.tagline}
-                </p>
-                <div className="text-xs text-stone-600 mt-2 space-y-0.5">
-                  <p>{settings.address}</p>
-                  <p>
-                    <span className="font-medium">Phone:</span> {settings.phone} |{' '}
-                    <span className="font-medium">Email:</span> {settings.email}
+              <div className="flex items-start gap-4">
+                <img
+                  src={settings.logoUrl || '/logo.jpg'}
+                  alt="Karaikudi Mess"
+                  className="w-16 h-16 rounded-xl object-contain border border-brand-200 shadow-sm"
+                />
+                <div>
+                  <h1 className="text-2xl font-black text-[#441a0e] tracking-tight uppercase">
+                    {settings.name}
+                  </h1>
+                  <p className="text-xs font-semibold text-brand-700 tracking-wide mt-0.5">
+                    {settings.tagline}
                   </p>
-                  {settings.gstin && (
+                  <div className="text-xs text-stone-600 mt-2 space-y-0.5">
+                    <p>{settings.address}</p>
                     <p>
-                      <span className="font-bold text-stone-800">GSTIN:</span> {settings.gstin} |{' '}
-                      <span className="font-bold text-stone-800">FSSAI Lic:</span>{' '}
-                      {settings.fssaiNumber || '12419008000456'}
+                      <span className="font-medium">Phone:</span> {settings.phone} |{' '}
+                      <span className="font-medium">Email:</span> {settings.email}
                     </p>
-                  )}
+                    {settings.gstin && (
+                      <p>
+                        <span className="font-bold text-stone-800">GSTIN:</span> {settings.gstin} |{' '}
+                        <span className="font-bold text-stone-800">FSSAI Lic:</span>{' '}
+                        {settings.fssaiNumber || '12419008000456'}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 

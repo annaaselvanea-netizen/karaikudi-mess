@@ -138,6 +138,7 @@ export interface AppUser {
 export interface RestaurantSettings {
   name: string;
   tamilName?: string;
+  logoUrl?: string;
   tagline: string;
   address: string;
   phone: string;

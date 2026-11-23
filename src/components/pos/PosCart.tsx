@@ -549,6 +549,11 @@ export function PosCart() {
           {lastSettledBill ? (
             <div>
               <div className="text-center pb-2 border-b border-black">
+                <img
+                  src={settings.logoUrl || '/logo.jpg'}
+                  alt="Karaikudi Mess"
+                  className="w-20 mx-auto mb-1.5 object-contain filter grayscale contrast-125"
+                />
                 <h2 className="text-sm font-black uppercase">{settings.name}</h2>
                 <p className="text-[10px]">{settings.tagline}</p>
                 <p className="text-[9px]">{settings.address}</p>

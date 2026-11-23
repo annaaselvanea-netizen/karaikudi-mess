@@ -33,9 +33,11 @@ export default function LoginPage() {
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-stone-200 overflow-hidden">
         {/* Banner */}
         <div className="bg-gradient-to-br from-[#441a0e] to-amberGold-600 p-8 text-white text-center">
-          <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-            <ChefHat className="w-8 h-8 text-amber-300" />
-          </div>
+          <img
+            src="/logo.jpg"
+            alt="Karaikudi Mess Logo"
+            className="w-24 h-24 object-cover rounded-2xl mx-auto mb-3 shadow-xl border-2 border-amberGold-400/50 bg-black/40"
+          />
           <h2 className="text-2xl font-black tracking-tight font-serif">Karaikudi Mess</h2>
           <p className="text-xs text-brand-200 mt-1">Hotel Billing & Restaurant Management POS</p>
         </div>
