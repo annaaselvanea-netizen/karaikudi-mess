@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   LayoutDashboard,
   UtensilsCrossed,
@@ -26,6 +27,7 @@ interface SidebarProps {
 export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { currentUser, isAdmin, isCashier, isStaff, logout } = useAuth();
+  const { language, t } = useLanguage();
 
   const navigation = [
     {
@@ -51,7 +53,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
     },
     {
       name: 'Food Menu',
-      tamilName: 'மெனு நிர்வாகம்',
+      tamilName: 'உணவுப் பட்டியல்',
       href: '/menu',
       icon: BookOpen,
       allowed: isAdmin,
@@ -96,14 +98,14 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar container */}
+      {/* Sidebar container - Locked to full height (h-screen shrink-0) so it never scrolls with main page */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#270d07] text-stone-200 border-r border-[#441a0e] flex flex-col transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 h-screen bg-[#270d07] text-stone-200 border-r border-[#441a0e] flex flex-col shrink-0 select-none transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Sidebar Brand Header */}
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[#441a0e] bg-[#1a0804]">
+        {/* Sidebar Brand Header (Fixed top) */}
+        <div className="flex items-center justify-between h-16 px-5 border-b border-[#441a0e] bg-[#1a0804] shrink-0">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-amberGold-500 flex items-center justify-center text-white shadow-md">
               <ChefHat className="w-5 h-5" />
@@ -124,16 +126,19 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </button>
         </div>
 
-        {/* Navigation list */}
+        {/* Navigation list - Independent scrollable list */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto custom-scrollbar">
           <div className="px-3 pb-2 text-[10px] font-bold text-brand-400 uppercase tracking-wider">
-            Restaurant Operations
+            {language === 'ta' ? 'ஹோட்டல் நிர்வாகம்' : 'Restaurant Operations'}
           </div>
 
           {navigation.map((item) => {
             if (!item.allowed) return null;
             const isActive = pathname === item.href;
             const Icon = item.icon;
+
+            const primaryLabel = language === 'ta' ? item.tamilName : item.name;
+            const secondaryLabel = language === 'ta' ? item.name : item.tamilName;
 
             return (
               <Link
@@ -147,14 +152,16 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                 }`}
               >
                 <Icon
-                  className={`w-4 h-4 transition-transform group-hover:scale-110 ${
+                  className={`w-4 h-4 transition-transform group-hover:scale-110 shrink-0 ${
                     isActive ? 'text-amberGold-300' : 'text-brand-400'
                   }`}
                 />
-                <div className="flex flex-col">
-                  <span className="leading-tight">{item.name}</span>
-                  <span className="text-[10px] text-stone-400 font-tamil leading-none mt-0.5 opacity-80">
-                    {item.tamilName}
+                <div className="flex flex-col truncate">
+                  <span className={`leading-tight truncate ${language === 'ta' ? 'font-tamil font-semibold' : ''}`}>
+                    {primaryLabel}
+                  </span>
+                  <span className="text-[10px] text-stone-400 leading-none mt-0.5 opacity-80 truncate">
+                    {secondaryLabel}
                   </span>
                 </div>
               </Link>
@@ -162,8 +169,8 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           })}
         </nav>
 
-        {/* Bottom User status footer */}
-        <div className="p-4 border-t border-[#441a0e] bg-[#1d0905]">
+        {/* Bottom User status footer (Fixed bottom) */}
+        <div className="p-4 border-t border-[#441a0e] bg-[#1d0905] shrink-0">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-brand-800 text-amberGold-300 flex items-center justify-center font-bold text-xs border border-brand-600">
@@ -178,7 +185,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </div>
             <button
               onClick={logout}
-              title="Sign Out"
+              title={language === 'ta' ? 'வெளியேறு' : 'Sign Out'}
               className="p-1.5 rounded-lg text-stone-400 hover:text-red-400 hover:bg-brand-950 transition"
             >
               <LogOut className="w-4 h-4" />
@@ -186,8 +193,10 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </div>
 
           <div className="text-center">
-            <p className="text-[10px] text-stone-400 font-mono">Karaikudi Mess POS v1.0.0</p>
-            <p className="text-[9px] text-stone-400">Chettinad Speciality POS System</p>
+            <p className="text-[10px] text-stone-400 font-mono">Karaikudi Mess POS v1.1.0</p>
+            <p className="text-[9px] text-stone-400">
+              {language === 'ta' ? 'காரைக்குடி பாரம்பரிய மெஸ்' : 'Chettinad Speciality POS System'}
+            </p>
           </div>
         </div>
       </aside>

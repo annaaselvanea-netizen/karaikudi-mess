@@ -66,7 +66,8 @@ interface RestaurantContextType {
   completePaymentAndBill: (
     paymentMethod: PaymentMethod,
     amountReceived: number,
-    splitDetails?: { cashAmount?: number; upiAmount?: number; cardAmount?: number }
+    splitDetails?: { cashAmount?: number; upiAmount?: number; cardAmount?: number },
+    shouldOpenModal?: boolean
   ) => Promise<Bill>;
   activePrintedBill: Bill | null;
   setActivePrintedBill: (bill: Bill | null) => void;
@@ -282,7 +283,8 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
   const completePaymentAndBill = async (
     paymentMethod: PaymentMethod,
     amountReceived: number,
-    splitDetails?: { cashAmount?: number; upiAmount?: number; cardAmount?: number }
+    splitDetails?: { cashAmount?: number; upiAmount?: number; cardAmount?: number },
+    shouldOpenModal = true
   ): Promise<Bill> => {
     if (cart.length === 0) {
       throw new Error('Cart is empty');
@@ -331,8 +333,10 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     await dbService.saveBill(newBill);
     await refreshBills();
 
-    // 4. Set as active bill for immediate printing
-    setActivePrintedBill(newBill);
+    // 4. Set as active bill for immediate printing if modal requested
+    if (shouldOpenModal) {
+      setActivePrintedBill(newBill);
+    }
 
     // 5. Automatic Google Sheets Synchronization (if configured & enabled)
     if (settings.sheetsAutoSync) {

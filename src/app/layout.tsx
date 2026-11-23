@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { RestaurantProvider } from '@/context/RestaurantContext';
+import { LanguageProvider } from '@/context/LanguageContext';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 
 export const metadata: Metadata = {
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <RestaurantProvider>
-            <DashboardShell>{children}</DashboardShell>
-          </RestaurantProvider>
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <RestaurantProvider>
+              <DashboardShell>{children}</DashboardShell>
+            </RestaurantProvider>
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

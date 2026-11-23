@@ -2,12 +2,15 @@
 
 import React, { useState } from 'react';
 import { useRestaurant } from '@/context/RestaurantContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { MenuItem, Category } from '@/types';
 import { formatCurrency } from '@/lib/utils';
-import { Search, Plus, Minus, Check, Flame } from 'lucide-react';
+import { Search, Plus, Minus, Flame } from 'lucide-react';
 
 export function PosMenuGrid() {
   const { menuItems, categories, cart, addToCart, updateQuantity } = useRestaurant();
+  const { language, t } = useLanguage();
+
   const [selectedCategory, setSelectedCategory] = useState<string>('All Items');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filterType, setFilterType] = useState<'all' | 'veg' | 'non-veg'>('all');
@@ -18,6 +21,7 @@ export function PosMenuGrid() {
     const categoryMatch =
       selectedCategory === 'All Items' ||
       selectedCategory === 'cat-all' ||
+      selectedCategory === 'அனைத்தும்' ||
       item.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
       selectedCategory.toLowerCase().includes(item.category.toLowerCase());
 
@@ -38,7 +42,7 @@ export function PosMenuGrid() {
   return (
     <div className="flex-1 flex flex-col min-w-0 bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
       {/* Top Controls: Search, Veg/Non-Veg filter */}
-      <div className="p-4 border-b border-stone-200 bg-amber-50/40 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div className="p-4 border-b border-stone-200 bg-amber-50/40 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
         {/* Search Input */}
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
@@ -46,7 +50,7 @@ export function PosMenuGrid() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search Chettinad dishes (English / தமிழ்)..."
+            placeholder={t('pos.searchPlaceholder')}
             className="w-full pl-9 pr-4 py-2 bg-white rounded-xl border border-stone-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm"
           />
         </div>
@@ -59,7 +63,7 @@ export function PosMenuGrid() {
               filterType === 'all' ? 'bg-white shadow text-stone-900 font-bold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            All Items
+            {t('pos.all')}
           </button>
           <button
             onClick={() => setFilterType('veg')}
@@ -68,7 +72,7 @@ export function PosMenuGrid() {
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 border border-white" />
-            Pure Veg
+            <span>{t('pos.veg')}</span>
           </button>
           <button
             onClick={() => setFilterType('non-veg')}
@@ -77,15 +81,18 @@ export function PosMenuGrid() {
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-red-400 border border-white" />
-            Non-Veg
+            <span>{t('pos.nonVeg')}</span>
           </button>
         </div>
       </div>
 
       {/* Categories Horizontal Tabs */}
-      <div className="px-4 py-2.5 bg-stone-50 border-b border-stone-200 overflow-x-auto flex items-center gap-2 no-scrollbar">
+      <div className="px-4 py-2.5 bg-stone-50 border-b border-stone-200 overflow-x-auto flex items-center gap-2 no-scrollbar shrink-0">
         {categories.map((cat) => {
           const isSelected = selectedCategory === cat.name || (cat.id === 'cat-all' && selectedCategory === 'All Items');
+          const primaryName = language === 'ta' && cat.tamilName ? cat.tamilName : cat.name;
+          const secondaryName = language === 'ta' ? cat.name : cat.tamilName;
+
           return (
             <button
               key={cat.id}
@@ -96,10 +103,10 @@ export function PosMenuGrid() {
                   : 'bg-white text-stone-700 hover:bg-stone-200 border border-stone-200'
               }`}
             >
-              <span>{cat.name}</span>
-              {cat.tamilName && (
-                <span className={`text-[10px] font-tamil opacity-75 ${isSelected ? 'text-amber-300' : 'text-stone-500'}`}>
-                  ({cat.tamilName})
+              <span className={language === 'ta' ? 'font-tamil' : ''}>{primaryName}</span>
+              {secondaryName && (
+                <span className={`text-[10px] opacity-75 ${isSelected ? 'text-amber-300' : 'text-stone-500'}`}>
+                  ({secondaryName})
                 </span>
               )}
             </button>
@@ -112,14 +119,21 @@ export function PosMenuGrid() {
         {filteredItems.length === 0 ? (
           <div className="h-64 flex flex-col items-center justify-center text-stone-400">
             <Flame className="w-12 h-12 text-stone-300 mb-2" />
-            <p className="text-sm font-semibold">No food items found matching your filters</p>
-            <p className="text-xs">Try selecting another category or clear search terms</p>
+            <p className="text-sm font-semibold">
+              {language === 'ta' ? 'உணவுகள் எதுவும் கிடைக்கவில்லை' : 'No food items found matching your filters'}
+            </p>
+            <p className="text-xs">
+              {language === 'ta' ? 'வேறு பிரிவை அல்லது வடிகட்டியை தேர்வு செய்யவும்' : 'Try selecting another category or clear search terms'}
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {filteredItems.map((item) => {
               const inCartItem = cart.find((c) => c.menuItemId === item.id);
               const qty = inCartItem?.quantity || 0;
+
+              const dishTitle = language === 'ta' && item.tamilName ? item.tamilName : item.name;
+              const dishSubtitle = language === 'ta' ? item.name : item.tamilName;
 
               return (
                 <div
@@ -156,13 +170,13 @@ export function PosMenuGrid() {
                     {item.isPopular && (
                       <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
                         <Flame className="w-2.5 h-2.5" />
-                        Popular
+                        <span>{t('pos.popular')}</span>
                       </div>
                     )}
 
                     {!item.isAvailable && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xs font-bold uppercase tracking-wider">
-                        Out of Stock
+                        {t('pos.outOfStock')}
                       </div>
                     )}
                   </div>
@@ -171,12 +185,14 @@ export function PosMenuGrid() {
                   <div className="p-3 flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-start justify-between gap-1">
-                        <h4 className="text-xs font-bold text-stone-900 group-hover:text-brand-800 transition line-clamp-1 leading-snug">
-                          {item.name}
+                        <h4 className={`text-xs font-bold text-stone-900 group-hover:text-brand-800 transition line-clamp-1 leading-snug ${
+                          language === 'ta' ? 'font-tamil text-[13px]' : ''
+                        }`}>
+                          {dishTitle}
                         </h4>
                       </div>
-                      {item.tamilName && (
-                        <p className="text-[10px] text-stone-500 font-tamil truncate">{item.tamilName}</p>
+                      {dishSubtitle && (
+                        <p className="text-[10px] text-stone-500 font-tamil truncate">{dishSubtitle}</p>
                       )}
                       <p className="text-[10px] text-stone-400 mt-0.5">{item.category}</p>
                     </div>
@@ -211,7 +227,7 @@ export function PosMenuGrid() {
                               className="px-3 py-1 bg-gradient-to-r from-brand-600 to-amberGold-600 hover:from-brand-700 hover:to-amberGold-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition active:scale-95"
                             >
                               <Plus className="w-3 h-3" />
-                              <span>Add</span>
+                              <span>{t('pos.add')}</span>
                             </button>
                           )}
                         </div>

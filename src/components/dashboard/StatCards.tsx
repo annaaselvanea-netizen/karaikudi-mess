@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRestaurant } from '@/context/RestaurantContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { formatCurrency } from '@/lib/utils';
 import {
   IndianRupee,
@@ -16,6 +17,7 @@ import {
 
 export function StatCards() {
   const { bills, orders, expenses } = useRestaurant();
+  const { language, t } = useLanguage();
 
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -140,6 +142,9 @@ export function StatCards() {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
       {stats.map((stat, idx) => {
         const Icon = stat.icon;
+        const mainTitle = language === 'ta' ? stat.tamilTitle : stat.title;
+        const subTitle = language === 'ta' ? stat.title : stat.tamilTitle;
+
         return (
           <div
             key={idx}
@@ -147,10 +152,12 @@ export function StatCards() {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider opacity-80">{stat.title}</p>
-                <p className="text-[10px] opacity-65 font-tamil">{stat.tamilTitle}</p>
+                <p className={`text-xs font-bold uppercase tracking-wider opacity-90 ${language === 'ta' ? 'font-tamil text-[13px]' : ''}`}>
+                  {mainTitle}
+                </p>
+                <p className="text-[10px] opacity-65 font-tamil">{subTitle}</p>
               </div>
-              <div className={`p-2 rounded-xl shadow-xs ${stat.iconColor}`}>
+              <div className={`p-2 rounded-xl shadow-xs shrink-0 ${stat.iconColor}`}>
                 <Icon className="w-4 h-4" />
               </div>
             </div>

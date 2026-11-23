@@ -14,12 +14,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [showA4Modal, setShowA4Modal] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-[#fbf6e8]/40 text-stone-900 font-sans antialiased">
-      {/* Sidebar */}
+    <div className="h-screen w-screen overflow-hidden flex bg-[#fbf6e8]/40 text-stone-900 font-sans antialiased">
+      {/* Anchored Left Sidebar - Never scrolls with main page */}
       <Sidebar mobileOpen={mobileMenuOpen} onMobileClose={() => setMobileMenuOpen(false)} />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* Main Right Content Area - Fixed Header with Independent Scrollable Main */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <Header onMobileMenuToggle={() => setMobileMenuOpen(true)} />
 
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 custom-scrollbar">
@@ -27,7 +27,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
 
-      {/* Floating Active Thermal Receipt Modal (Triggered right after billing) */}
+      {/* Floating Active Thermal Receipt Modal (Used for Reprinting from Orders/Transactions) */}
       {activePrintedBill && (
         <ThermalReceiptModal
           bill={activePrintedBill}
